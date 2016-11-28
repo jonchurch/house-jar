@@ -32,16 +32,14 @@ controller.on('slash_command', function (bot, message) {
 
   switch (message.command) {
     case '/jar':
-    const help = '/jar 5 in - adds 5 dollars to jar\n/jar 5 out - subtracts 5 dollars from jar \n/jar set 25 - sets jar total to 25 dollars'
-      const arr = message.text.replace(/\$/g,'').trim().split(' ');
-      if (!isNaN(+arr[0])) {
-        if (arr[1] === 'in') {
-          jarTotal += +arr[0]
-          bot.replyPrivate(message, 'Success! Put ' + arr[0] + ' ' + arr[1] + ' the jar\nThe jar now has $' + jarTotal)
-        } else if (arr[1] === 'out') {
-          jarTotal -= +arr[0]
-          bot.replyPrivate(message, 'Success! Took ' + arr[0] + ' ' + arr[1] + ' of the jar\nThe jar now has $' + jarTotal)
-        }
+      const help = '/jar 5 in - adds 5 dollars to jar\n/jar 5 out - subtracts 5 dollars from jar \n/jar set 25 - sets jar total to 25 dollars'
+      const arr = message.text.replace(/\+/g,'').trim().split(' ');
+      console.log('========sanity check:', isNaN(+''))
+      if (arr.length < 2 && !isNaN(+arr[0]) && arr[0] !== '') {
+        const successText = (+arr[0] >= 0) ? 'Put $' + arr[0] + ' in the jar' : 'Took $' + arr[0].replace(/\-/g,'') + ' out of the jar'
+        jarTotal += parseInt(arr[0])
+        bot.replyPrivate(message, 'Success! ' + successText + '\nThe jar now has $' + jarTotal)
+
       } else if (arr[0] === 'set') {
         if (!isNaN(+arr[1])) {
           jarTotal = +arr[1]
@@ -51,6 +49,23 @@ controller.on('slash_command', function (bot, message) {
           bot.replyPrivate(message, help)
         }
       }
+      // if (!isNaN(+arr[0])) {
+      //   if (arr[1] === 'in') {
+      //     jarTotal += +arr[0]
+      //     bot.replyPrivate(message, 'Success! Put ' + arr[0] + ' in the jar\nThe jar now has $' + jarTotal)
+      //   } else if (arr[1] === 'out') {
+      //     jarTotal -= +arr[0]
+      //     bot.replyPrivate(message, 'Success! Took ' + arr[0] + ' ' + arr[1] + ' of the jar\nThe jar now has $' + jarTotal)
+      //   }
+      // } else if (arr[0] === 'set') {
+      //   if (!isNaN(+arr[1])) {
+      //     jarTotal = +arr[1]
+      //     bot.replyPrivate(message, 'Success! Jar total set to $' + arr[1])
+      //   }
+      //   else {
+      //     bot.replyPrivate(message, help)
+      //   }
+      // }
       break
     default:
       bot.replyPrivate(message, "Sorry, I'm not sure what that command is")

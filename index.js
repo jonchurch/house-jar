@@ -34,7 +34,6 @@ controller.on('slash_command', function (bot, message) {
     case '/jar':
       const help = '/jar 5 in - adds 5 dollars to jar\n/jar 5 out - subtracts 5 dollars from jar \n/jar set 25 - sets jar total to 25 dollars'
       const arr = message.text.replace(/\+/g,'').trim().split(' ');
-      console.log('========sanity check:', isNaN(+''))
       if (arr.length < 2 && !isNaN(+arr[0]) && arr[0] !== '') {
         const successText = (+arr[0] >= 0) ? 'Put $' + arr[0] + ' in the jar' : 'Took $' + arr[0].replace(/\-/g,'') + ' out of the jar'
         jarTotal += parseInt(arr[0])

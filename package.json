@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "Jon Church",
   "license": "ISC",
   "dependencies": {
-    "botkit": "^0.4.2"
+    "botkit": "^0.4.2",
+    "dotenv": "^2.0.0"
   }
 }

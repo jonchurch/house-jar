@@ -1,7 +1,10 @@
+require('dotenv').config()
+
 
 const Botkit = require('botkit')
 
 var controller = Botkit.slackbot({
+  interactive_replies: true,
   json_file_store: './db_slackbutton_slashcommand/',
 }).configureSlackApp({
     clientId: process.env.clientId,
@@ -32,6 +35,38 @@ controller.on('slash_command', function (bot, message) {
 
   switch (message.command) {
     case '/jar':
+
+      var outgoing = {
+        text: 'Hello!',
+        attachments: [
+            {
+                title: 'Do you want to proceed?',
+                callback_id: '123',
+                attachment_type: 'default',
+                actions: [
+                    {
+                        "name":"yes",
+                        "text": "Yes",
+                        "value": "yes",
+                        "type": "button",
+                    },
+                    {
+                        "name":"no",
+                        "text": "No",
+                        "value": "no",
+                        "type": "button",
+                    }
+                ]
+            }
+        ]
+      }
+
+      bot.replyPrivate(message, outgoing);
+      break
+
+
+
+    case '/oldjar':
       const help = '/jar 5 in - adds 5 dollars to jar\n/jar 5 out - subtracts 5 dollars from jar \n/jar set 25 - sets jar total to 25 dollars'
       const arr = message.text.replace(/\+/g,'').trim().split(' ');
       if (arr.length < 2 && !isNaN(+arr[0]) && arr[0] !== '') {
@@ -48,23 +83,6 @@ controller.on('slash_command', function (bot, message) {
           bot.replyPrivate(message, help)
         }
       }
-      // if (!isNaN(+arr[0])) {
-      //   if (arr[1] === 'in') {
-      //     jarTotal += +arr[0]
-      //     bot.replyPrivate(message, 'Success! Put ' + arr[0] + ' in the jar\nThe jar now has $' + jarTotal)
-      //   } else if (arr[1] === 'out') {
-      //     jarTotal -= +arr[0]
-      //     bot.replyPrivate(message, 'Success! Took ' + arr[0] + ' ' + arr[1] + ' of the jar\nThe jar now has $' + jarTotal)
-      //   }
-      // } else if (arr[0] === 'set') {
-      //   if (!isNaN(+arr[1])) {
-      //     jarTotal = +arr[1]
-      //     bot.replyPrivate(message, 'Success! Jar total set to $' + arr[1])
-      //   }
-      //   else {
-      //     bot.replyPrivate(message, help)
-      //   }
-      // }
       break
     default:
       bot.replyPrivate(message, "Sorry, I'm not sure what that command is")
